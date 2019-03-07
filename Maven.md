@@ -3,6 +3,7 @@
 * 内置属性：${basedir}表示项目根目录，${version}表示项目版本。
 * POM属性：pom中对应元素的值。例如${project.artifactId}对应了<project><artifactId>元素的值。
 * 自定义属性：在pom中<properties>元素下自定义的Maven属性。例如
+
 ```
 <properties>  
 	<my.prop>hello</my.prop>  
@@ -14,6 +15,7 @@
 
 ## 资源过滤（自动替换配置文件中以${}包裹的变量）
 * 默认情况下，Maven属性只有在POM中才会被解析。资源过滤就是指让Maven属性在资源文件(src/main/resources、src/test/resources)中也能被解析。
+
 ```
 <build>
 	<resources>
@@ -31,6 +33,7 @@
 </build>
 ```
 * Maven除了可以对主资源目录、测试资源目录过滤外，还能对Web项目的资源目录(如css、js目录)进行过滤。这时需要对maven-war-plugin插件进行配置
+
 ```
 <plugin>  
     <groupId>org.apache.maven.plugins</groupId>  
@@ -57,6 +60,7 @@
 * package命令完成了项目编译、单元测试、打包功能，但没有把打好的可执行jar包（war包或其它形式的包）布署到本地maven仓库和远程maven私服仓库
 * install命令完成了项目编译、单元测试、打包功能，同时把打好的可执行jar包（war包或其它形式的包）布署到本地maven仓库，但没有布署到远程maven私服仓库
 * deploy命令完成了项目编译、单元测试、打包功能，同时把打好的可执行jar包（war包或其它形式的包）布署到本地maven仓库和远程maven私服仓库　
+
 ```
 <properties>
     <jdbc.url>jdbc:mysql://localhost:3306/abc</jdbc.url>
@@ -75,6 +79,7 @@
 </profiles>
 ```
 * 操作系统环境激活
+
 ```
 <profiles>  
 	<profile>  
@@ -105,7 +110,8 @@
 这里的family值包括Window、UNIX和Mac等，而其他几项对应系统属性的os.name、os.arch、os.version
 
 # Maven打包
-```
+
+```xml
 <build>
 	<resources>
 		<resource>
