@@ -5,7 +5,7 @@
 六种
 * 内置属性：${basedir}表示项目根目录，${version}表示项目版本。
 * POM属性：pom中对应元素的值。例如${project.artifactId}对应了<project><artifactId>元素的值。
-* 自定义属性：在pom中<properties>元素下自定义的Maven属性。例如
+* 自定义属性：在pom中<properties>元素下自定义的Maven属性。
 
 ```xml
 <properties>  
