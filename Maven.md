@@ -7,7 +7,7 @@
 * POM属性：pom中对应元素的值。例如${project.artifactId}对应了<project><artifactId>元素的值。
 * 自定义属性：在pom中<properties>元素下自定义的Maven属性。例如
 
-```mxl
+```xml
 <properties>  
 	<my.prop>hello</my.prop>  
 </properties>
