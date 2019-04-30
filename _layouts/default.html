@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: 'en-US' }}">
+<head>
+    <meta charset="UTF-8">
+    {% seo %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <script src="https://code.jquery.com/jquery-3.3.0.min.js" crossorigin="anonymous"></script>
+    <script src="/assets/js/main.js"></script>
+</head>
+<body>
+    <header class="page-header">
+        {% for item in site.data.navigation %}
+            <a href="{{ item.link }}" class="btn {% if page.url == item.link %}active{% endif %}">{{ item.name }}</a>
+        {% endfor %}
+    </header>
+
+    <div class="page-content">
+        <nav><ul></ul></nav>
+
+        <main id="content" class="main-content" role="main">
+            {{ content }}
+            <footer class="site-footer">
+                {% if site.github.is_project_page %}
+                    <span class="site-footer-owner"><a href="{{ site.github.repository_url }}">{{ site.github.repository_name }}</a> is maintained by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a>.</span>
+                {% endif %}
+            </footer>
+        </main>
+    </div>
+</body>
+</html>
