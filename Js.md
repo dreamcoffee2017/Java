@@ -6,3 +6,8 @@
 * ISSUES:安装cnpm
 * cant find executable python
 * cnpm install node-sass --save-dev
+
+* [javascript charts and maps](https://www.amcharts.com)
+* [bootstrap](https://v4.bootcss.com)
+* [vue element](http://element-cn.eleme.io/#/zh-CN/component/table)
+* [vue.js](https://cn.vuejs.org/v2/guide/forms.html)

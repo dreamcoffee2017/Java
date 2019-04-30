@@ -10,12 +10,6 @@
 * [alibaba/druid](https://github.com/alibaba/druid/wiki/%E9%85%8D%E7%BD%AE_LogFilter)
 * [cockroach](https://www.cockroachlabs.com/docs/stable/start-a-local-cluster.html)
 * [spring事务传播性与隔离级别](https://my.oschina.net/dongli/blog/56904)
-* [sql执行顺序](https://blog.csdn.net/q959249819/article/details/52035476)
-* [sql优化--in和exists效率](http://www.voidcn.com/article/p-udmyxohq-qq.html)
-* [javascript charts and maps](https://www.amcharts.com)
-* [bootstrap](https://v4.bootcss.com)
-* [vue element](http://element-cn.eleme.io/#/zh-CN/component/table)
-* [vue.js](https://cn.vuejs.org/v2/guide/forms.html)
 
 * springcloud
 * 分表分库
