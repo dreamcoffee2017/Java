@@ -46,7 +46,7 @@ return result;
 ```
 
 ## 总结
-* 1 异常可能抛出数据库结构，防止日志打印不全
+* 异常可能抛出数据库结构，防止日志打印不全
 
 ```java
 // service
@@ -86,10 +86,10 @@ public String getMessage() {
 }
 ```
 
-* 2 service层，所有对外的方法增加check
-* 3 安卓上传超时，修改tomcat超时时间，nginx文件大小，超时时间
-* 4 activemq延迟任务开启，配置activemq.xml schedulerSupport="true"
-* 5 tomcat当下载服务器用，service.xml增加
+* service层，所有对外的方法增加check
+* 安卓上传超时，修改tomcat超时时间，nginx文件大小，超时时间
+* activemq延迟任务开启，配置activemq.xml schedulerSupport="true"
+* tomcat当下载服务器用，service.xml增加
 
 ```xml
 <Context path="/download" reloadable="true" docBase="d://static//download" crossContext="true"/>
@@ -101,28 +101,124 @@ catalina.sh增加
 JAVA_OPTS="-server -XX:PermSize=128m -XX:MaxPermSize=512m"
 ```
 
+* 枚举
+
+```java
+public enum BoxCabinStatusEnum {
+
+    NORMAL("1", "正常"),
+    ERROR("2", "异常");
+
+    private String code;
+    private String desc;
+
+    BoxCabinStatusEnum(String code, String desc) {
+        this.code = code;
+        this.desc = desc;
+    }
+
+    public static String getDescByCode(String code) {
+        for (BoxCabinStatusEnum e : BoxCabinStatusEnum.values()) {
+            if (e.code.equals(code)) {
+                return e.desc;
+            }
+        }
+        return null;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+}
+```
+
+* 文件操作
+
+```java
+if (file.exists()) {
+	if (!file.delete()) {
+		logger.error(file.getName() + " delete fail");
+	}
+}
+if (!file.exists()) {
+	if (!file.mkdirs()) {
+		logger.error(file.getName() + " create fail");
+	}
+}
+```
+
+* 测试
+
+```java
+public class SystemControllerTest {
+
+    private static final String URL = "http://172.18.0.103:8082/web-waybill/system/";
+    private HttpHeaders headers;
+    private RestTemplate restTemplate;
+    private ResponseEntity<String> response;
+
+    @Before
+    public void setUp() throws Exception {
+        headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        restTemplate = new RestTemplate();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        if (response == null) return;
+        Assert.isTrue(response.getStatusCode().value() == 200, "请求失败！");
+        JSONObject jsonObject = JSONObject.parseObject(response.getBody());
+        System.out.println(jsonObject);
+        Assert.isTrue("1".equals(jsonObject.get("code")));
+    }
+
+    @Test
+    public void queryCountryList() {
+        HttpEntity httpEntity = new HttpEntity<>(headers);
+        response = restTemplate.exchange(URL + "queryCountryList", HttpMethod.POST, httpEntity, String.class);
+    }
+}
+```
+
+* tx-lcn分布式事务
+超时回滚不抛错配置超时时间大于dubbo服务https://www.txlcn.org/zh-cn/docs/setting/manager.html
+
+* dubbo
+dubbo坑，跨service无法处理对象
+
+* lts
+lts-admin起不来配置.sh tmp目录
+jobtractor重启后，重启service-task
+
 ## 跨域
 CrossOrigin 不同机子跨域，同一机子配置nginx
 
 ## token
 前后分离场景下使用jwt登录流程
-
-### 后端
-1. 在登录接口中 如果校验账号密码成功 则根据用户id和用户类型创建jwt token(有效期设置为-1，即永不过期),得到A
+* 单token
+1. 在登录接口中，根据用户id和用户类型创建jwt token(有效期设置为-1，即永不过期)，得到A
 2. 更新登录日期(当前时间new Date()即可)（业务上可选），得到B
 3. 在redis中缓存key为ACCESS_TOKEN:userId:A(加上A是为了防止用户多个客户端登录 造成token覆盖),value为B的毫秒数（转换成字符串类型），过期时间为7天（7 * 24 * 60 * 60）
 4. 在登录结果中返回json格式为{"result":"success","token": A}
-5. 用户在接口请求header中携带token进行登录，后端在所有接口前置拦截器进行拦截，作用是解析token 拿到userId和用户类型（用户调用业务接口只需要传token即可），
-如果解析失败（抛出SignatureException），则返回json（code = 0 ,info= Token验证不通过, errorCode = '1001'）；
-此外如果解析成功，验证redis中key为ACCESS_TOKEN:userId:A 是否存在 如果不存在 则返回json（code = 0 ,info= 会话过期请重新登录, errorCode = '1002'）；
+5. 接口header携带token，后端拦截器，解析失败，返回（code = 0 ,info= Token验证不通过, errorCode = '1001'）；
+解析成功，验证redis中key为ACCESS_TOKEN:userId:A，不存在返回（code = 0 ,info= 会话过期请重新登录, errorCode = '1002'）；
 如果缓存key存在，则自动续7天超时时间（value不变），实现频繁登录用户免登陆。
-6. 把userId和用户类型放入request参数中 接口方法中可以直接拿到登录用户信息
 7. 如果是修改密码或退出登录 则废除access_tokens（删除key）
 
-### 前端（VUE）
-1. 用户登录成功，则把username存入cookie中，key为loginUser;把token存入cookie中，key为accessToken
-   把token存入Vuex全局状态中
-2. 进入首页
+* 双token
+1.登录成功，后台jwt生成access_token（jwt有效期30分钟）和refresh_token（jwt有效期15天），并缓存到redis（hash-key为token,sub-key为手机号,value为设备唯一编号（根据手机号码，可以人工废除全部token，也可以根据sub-key,废除部分设备的token。），设置过期时间为1个月，保证最终所有token都能删除)，返回后，客户端缓存此两种token;
+2.使用access_token请求接口资源，校验成功且redis中存在该access_token（未废除）则调用成功；如果token超时，中间件删除access_token（废除）；客户端再次携带refresh_token调用中间件接口获取新的access_token;
+3.中间件接受刷新token的请求后，检查refresh_token是否过期。
+如过期，拒绝刷新，删除refresh_token（废除）； 客户端收到该状态后，跳转到登录页；
+如未过期，检查缓存中是否有refresh_token（是否被废除），如果有，则生成新的access_token并返回给客户端，客户端接着携带新的access_token重新调用上面的资源接口。
+4.客户端退出登录或修改密码后，调用中间件注销旧的token(中间件删除access_token和refresh_token（废除）)，同时清空客户端侧的access_token和refresh_toke。
+5.如手机丢失，可以根据手机号人工废除指定用户设备关联的token。
+6.以上3刷新access_token可以增加根据登录时间判断最长X时间必须重新登录，此时则拒绝刷新token。（拒绝的场景：失效，长时间未登录，频繁刷新）
 
 ## 工具
 * 开源数据库工具 dbeaver

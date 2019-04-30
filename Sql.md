@@ -15,3 +15,12 @@ select TABLE_SCHEMA `database`,TABLE_NAME `table`
 from information_schema.`COLUMNS`
 where TABLE_SCHEMA='irdms_dev' and COLUMN_NAME='ord_points_order_id'
 ```
+
+* binlog操作成功的日志
+
+```sh
+mysqlbinlog --start-datetime="2019-04-26 00:00:00" --stop-datetime="2019-04-27 00:00:00" binlog.000008 > 20190426.log.bak
+```
+
+* 查询日志 默认关闭
+* 注意：即便是执行不成功的操作也会被记录在该文件中。

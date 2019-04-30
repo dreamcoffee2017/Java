@@ -17,20 +17,5 @@
 * [vue element](http://element-cn.eleme.io/#/zh-CN/component/table)
 * [vue.js](https://cn.vuejs.org/v2/guide/forms.html)
 
-* 大谈分布式
-* 高谈阔论微服务
-* nginx
-* 消息中间件各种MQ框架
-* docker
-* 服务部署
-* dubbo
 * springcloud
-* zookepper
-* 分布式数据一致性
-* 分布式锁
-* 线程池
-* 网络通信BIO NIO
-* jvm
 * 分表分库
-* 主从
-* 服务集群
