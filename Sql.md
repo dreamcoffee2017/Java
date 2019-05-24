@@ -28,3 +28,10 @@ mysqlbinlog --start-datetime="2019-04-26 00:00:00" --stop-datetime="2019-04-27 0
 
 * [sql执行顺序](https://blog.csdn.net/q959249819/article/details/52035476)
 * [sql优化--in和exists效率](http://www.voidcn.com/article/p-udmyxohq-qq.html)
+
+* mybatis
+
+```
+<if test="activityStatus == '1'">无效
+<if test='activityStatus == "1"'>有效
+```
