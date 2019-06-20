@@ -185,15 +185,76 @@ public class SystemControllerTest {
 }
 ```
 
+* spring切面日志
+
+```java
+package com.rbsn.tms.common.aspect;
+
+import com.alibaba.fastjson.JSON;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.Signature;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+@Component
+@Aspect
+public class JsonParameterConverterAspect {
+
+    private final static Logger logger = LoggerFactory.getLogger(JsonParameterConverterAspect.class);
+
+    @Pointcut("execution(* com.rbsn.tms.*.controller.*.*(..))")
+    private void controllerAspect() {
+    }
+
+    @Before("controllerAspect()")
+    public void before(JoinPoint joinPoint) throws Exception {
+        Signature signature = joinPoint.getSignature();
+        logger.info("Controller method {}.{}", signature.getDeclaringTypeName(), signature.getName());
+        logger.info("Controller param {} ", JSON.toJSONString(joinPoint.getArgs()));
+    }
+
+    @AfterReturning(pointcut = "controllerAspect()", returning = "result")
+    public void afterReturn(Object result) {
+        logger.info("Controller result {}", JSON.toJSONString(result));
+    }
+}
+```
+
+* spring日志屏蔽
+
+```xml
+log4j.logger.org.springframework = ${log4j.ale}
+```
+
+* spring事务提交后执行
+
+```java
+TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+    @Override
+    public void afterCommit() {
+        // do something
+    }
+});
+```
+
 * tx-lcn分布式事务
 超时回滚不抛错配置超时时间大于dubbo服务https://www.txlcn.org/zh-cn/docs/setting/manager.html
+dubbo默认10秒，tx-lcn默认5秒
+不支持线程操作db
+不支持spring事务提交后执行
+
 
 * dubbo
 dubbo坑，跨service无法处理对象
 
 * lts
-lts-admin起不来配置.sh tmp目录
-jobtractor重启后，重启service-task
+lts-admin linux访问报spring错误，配置lts-admin.sh文件，找到nohup "$JAVA"增加-Djava.io.tmpdir="$LTS_ADMIN_HOME/../tmp"
+jobtractor重启后，重启jobclient服务，如service-task
 
 ## 跨域
 CrossOrigin 不同机子跨域，同一机子配置nginx
