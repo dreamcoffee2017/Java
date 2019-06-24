@@ -188,19 +188,6 @@ public class SystemControllerTest {
 * spring切面日志
 
 ```java
-package com.rbsn.tms.common.aspect;
-
-import com.alibaba.fastjson.JSON;
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.Signature;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-
 @Component
 @Aspect
 public class JsonParameterConverterAspect {
@@ -212,15 +199,22 @@ public class JsonParameterConverterAspect {
     }
 
     @Before("controllerAspect()")
-    public void before(JoinPoint joinPoint) throws Exception {
+    public void before(JoinPoint joinPoint) {
         Signature signature = joinPoint.getSignature();
         logger.info("Controller method {}.{}", signature.getDeclaringTypeName(), signature.getName());
-        logger.info("Controller param {} ", JSON.toJSONString(joinPoint.getArgs()));
+        List<Object> args = new ArrayList<>(Arrays.asList(joinPoint.getArgs()));
+        args.removeIf(o -> o instanceof ServletRequest);
+        logger.info("Controller param {} ", JSON.toJSONString(args));
     }
 
     @AfterReturning(pointcut = "controllerAspect()", returning = "result")
     public void afterReturn(Object result) {
         logger.info("Controller result {}", JSON.toJSONString(result));
+    }
+
+    @AfterThrowing(pointcut = "controllerAspect()", throwing = "e")
+    public void doRecoveryActions(Exception e) {
+        logger.error("", e);
     }
 }
 ```
