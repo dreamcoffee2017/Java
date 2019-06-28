@@ -185,40 +185,6 @@ public class SystemControllerTest {
 }
 ```
 
-* spring切面日志
-
-```java
-@Component
-@Aspect
-public class JsonParameterConverterAspect {
-
-    private final static Logger logger = LoggerFactory.getLogger(JsonParameterConverterAspect.class);
-
-    @Pointcut("execution(* com.rbsn.tms.*.controller.*.*(..))")
-    private void controllerAspect() {
-    }
-
-    @Before("controllerAspect()")
-    public void before(JoinPoint joinPoint) {
-        Signature signature = joinPoint.getSignature();
-        logger.info("Controller method {}.{}", signature.getDeclaringTypeName(), signature.getName());
-        List<Object> args = new ArrayList<>(Arrays.asList(joinPoint.getArgs()));
-        args.removeIf(o -> o instanceof ServletRequest);
-        logger.info("Controller param {} ", JSON.toJSONString(args));
-    }
-
-    @AfterReturning(pointcut = "controllerAspect()", returning = "result")
-    public void afterReturn(Object result) {
-        logger.info("Controller result {}", JSON.toJSONString(result));
-    }
-
-    @AfterThrowing(pointcut = "controllerAspect()", throwing = "e")
-    public void doRecoveryActions(Exception e) {
-        logger.error("", e);
-    }
-}
-```
-
 * spring日志屏蔽
 
 ```xml
