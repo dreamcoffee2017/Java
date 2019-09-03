@@ -35,3 +35,12 @@ mysqlbinlog --start-datetime="2019-04-26 00:00:00" --stop-datetime="2019-04-27 0
 <if test="activityStatus == '1'">无效
 <if test='activityStatus == "1"'>有效
 ```
+
+* function
+limit无法跟运算,先set或select into赋值
+
+*rownum
+
+```
+select id,@rownum:=@rownum+1 r from scores,(select @rownum:=0) r
+```
