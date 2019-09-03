@@ -26,7 +26,7 @@ mysqlbinlog --start-datetime="2019-04-26 00:00:00" --stop-datetime="2019-04-27 0
 * 查询日志 默认关闭
 * 注意：即便是执行不成功的操作也会被记录在该文件中。
 
-* [sql执行顺序](https://blog.csdn.net/q959249819/article/details/52035476)
+* sql执行顺序 FROM -> WHERE -> SELECT -> GROUP BY -> HAVING -> ORDER BY -> LIMIT
 * [sql优化--in和exists效率](http://www.voidcn.com/article/p-udmyxohq-qq.html)
 
 * mybatis
