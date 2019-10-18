@@ -12,7 +12,13 @@
 * ./redis-cli keys "EQUIPMENT_ORDER_STOCK:100001*" | xargs ./redis-cli del
 * ./redis-cli keys "*"
 * 时间
-* 查看时区 timedatectl
+* date -R 系统时间(+0800表示东八区及中国时间)
+* date -s '2019-10-18 11:32:00'
+* clock 硬件时钟时间
+* clock -w 根据系统时间设置硬件时钟
+* 时区
+* tzselect TZ='Asia/Shanghai' export TZ 重新登录
+
 * 启动nginx域名访问
 * jekins发布问题磁盘满
 
