@@ -1,7 +1,7 @@
 # mysql
 * 安装路径 whereis mysql
-* 导出 mysqldump -u irdms -p irdms > irdms_20180816.sql
-* 导入 mysql -u irdms -p irdms < irdms_20180816.sql
+* 备份（远程账号要加ip，控制台输入密码） mysqldump -utms -h172.18.0.67 tms -p > tms_20191025.sql
+* 还原 mysql -utms -h172.18.0.67 tms -p < tms_20191025.sql
 * 查询隔离级别 SELECT @@tx_isolation
 * 1）read uncommitted : 读取尚未提交的数据 ：哪个问题都不能解决
 * 2）read committed：读取已经提交的数据 ：可以解决脏读 ---- oracle默认的
