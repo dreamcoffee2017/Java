@@ -253,7 +253,7 @@ CrossOrigin 不同机子跨域，同一机子配置nginx
 ## java环境变量
 * 1.系统变量 → 新建 JAVA_HOME
 * 2.系统变量 → 编辑 Path += ;%JAVA_HOME%\bin;%JAVA_HOME%\jre\bin;
-* 3.系统变量 → 新建 CLASSPATH = .;%JAVA_HOME%\lib;%JAVA_HOME%\lib\tools.jar
+* 3.系统变量 → 新建 CLASSPATH = .;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar
 * 4.检验 java -version
 
 ## idea激活
