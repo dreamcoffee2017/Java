@@ -27,8 +27,7 @@
 * :q 退出
 * :wq 保存
 * i 编辑 esc 退出
-* export JAVA_HOME=/home/soft/jdk1.8.0_111 
-* export JRE_HOME=${JAVA_HOME}/jre
-* export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib
-* export PATH=${JAVA_HOME}/bin:$PATH
+* JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.161-0.b14.el7_4.x86_64
+* PATH=$PATH:$JAVA_HOME/bin:$JAVA_HOME/jre/bin
+* export JAVA_HOME PATH
 * source /etc/profile
