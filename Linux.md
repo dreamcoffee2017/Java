@@ -31,3 +31,15 @@
 * PATH=$PATH:$JAVA_HOME/bin:$JAVA_HOME/jre/bin
 * export JAVA_HOME PATH
 * source /etc/profile
+
+查看IP ifconfig
+javac -classpath ../hadoop-core-1.1.2.jar *.java
+查看最新日志 tail
+循环读取 tail -f
+查看日志 cat
+查看最老日志 head
+查看Java进程 jps
+删除第一行 sed '1d' train.csv
+用户环境变量 vi ~/.bashrc 最下面增加
+export HADOOP_HOME=/home/hadoop/hadoop-2.0
+export PATH=$PATH:$HADOOP_HOME/bin 
